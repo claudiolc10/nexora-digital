@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nexora Digital: desenvolvimento de sites, design de interfaces e marketing digital. Empresa fictícia criada para um projeto de portfólio.">
+  <meta name="theme-color" content="#0e0f12">
+  <title>Nexora Digital | Sites, interfaces e marketing digital</title>
+  <!-- Favicon embutido (SVG): evita pedir um arquivo extra e o erro 404 no console -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230e0f12'/%3E%3Ccircle%20cx='16'%20cy='16'%20r='7'%20fill='%23d7ff4f'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+
+      <a class="logo" href="#inicio">
+        <span class="logo__texto">Nexora <span class="logo__sufixo">Digital</span></span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-principal">
+        <span class="menu-toggle__texto">Menu</span>
+        <span class="menu-toggle__icone" aria-hidden="true"></span>
+      </button>
+
+      <nav class="site-nav" id="menu-principal" aria-label="Principal">
+        <ul class="site-nav__lista">
+          <li><a class="site-nav__link" href="#inicio">Início</a></li>
+          <li><a class="site-nav__link" href="#servicos">Serviços</a></li>
+          <li><a class="site-nav__link" href="#sobre">Sobre</a></li>
+          <li><a class="site-nav__link" href="#contato">Contato</a></li>
+        </ul>
+        <a class="botao botao--primario site-nav__cta" href="#contato">Vamos conversar</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- HERO -->
+    <section id="inicio" class="hero" aria-labelledby="hero-titulo">
+      <div class="container hero__inner">
+
+        <div class="hero__conteudo">
+          <p class="eyebrow">Sites · Interfaces · Marketing digital</p>
+
+          <h1 id="hero-titulo" class="hero__titulo">
+            Sites que explicam seu negócio e levam o visitante até a
+            <span class="destaque">conversa.</span>
+          </h1>
+
+          <p class="hero__texto">
+            A Nexora Digital desenha, desenvolve e divulga sites institucionais:
+            páginas rápidas, fáceis de navegar e pensadas para transformar
+            visitas em pedidos de contato.
+          </p>
+
+          <div class="hero__acoes">
+            <a class="botao botao--primario" href="#contato">Iniciar um projeto</a>
+            <a class="botao botao--secundario" href="#servicos">Conhecer os serviços</a>
+          </div>
+        </div>
+
+        <!-- Composição geométrica decorativa (leitores de tela ignoram) -->
+        <svg class="hero__arte" viewBox="0 0 400 400" aria-hidden="true">
+          <path class="forma-destaque" d="M0 200A200 200 0 0 1 200 0V200Z" />
+          <rect class="forma-linha" x="201" y="1" width="198" height="198" />
+          <circle class="forma-destaque" cx="300" cy="100" r="28" />
+          <circle class="forma-superficie" cx="100" cy="300" r="99" />
+          <path class="forma-claro" d="M200 200H400A200 200 0 0 1 200 400Z" />
+        </svg>
+
+      </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="secao servicos" aria-labelledby="servicos-titulo">
+      <div class="container">
+
+        <header class="secao__cabecalho">
+          <p class="eyebrow">Serviços</p>
+          <h2 id="servicos-titulo" class="secao__titulo">Do primeiro clique ao primeiro contato.</h2>
+          <p class="secao__intro">
+            Cada serviço cuida de uma etapa da jornada do visitante:
+            ser encontrado, entender a proposta e entrar em contato.
+          </p>
+        </header>
+
+        <ul class="servicos__lista">
+
+          <li>
+            <article class="card-servico card-servico--sites">
+              <div class="card-servico__icone">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16" />
+                </svg>
+              </div>
+              <div class="card-servico__corpo">
+                <span class="card-servico__numero" aria-hidden="true">01</span>
+                <h3 class="card-servico__titulo">Desenvolvimento de sites</h3>
+                <p class="card-servico__texto">
+                  Sites institucionais modernos, rápidos e responsivos, com código
+                  organizado e páginas que funcionam bem em qualquer celular.
+                </p>
+              </div>
+            </article>
+          </li>
+
+          <li>
+            <article class="card-servico card-servico--interfaces">
+              <div class="card-servico__icone">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="16" rx="2" />
+                  <path d="M3 9h18M9 9v11" />
+                </svg>
+              </div>
+              <div class="card-servico__corpo">
+                <span class="card-servico__numero" aria-hidden="true">02</span>
+                <h3 class="card-servico__titulo">Design de interfaces</h3>
+                <p class="card-servico__texto">
+                  Experiências digitais organizadas, intuitivas e consistentes:
+                  hierarquia clara, navegação previsível e componentes que seguem
+                  um mesmo padrão.
+                </p>
+              </div>
+            </article>
+          </li>
+
+          <li>
+            <article class="card-servico card-servico--marketing">
+              <div class="card-servico__icone">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 17l6-6 4 4 8-8M15 7h6v6" />
+                </svg>
+              </div>
+              <div class="card-servico__corpo">
+                <span class="card-servico__numero" aria-hidden="true">03</span>
+                <h3 class="card-servico__titulo">Marketing digital</h3>
+                <p class="card-servico__texto">
+                  Estratégias para ampliar a visibilidade da sua marca e gerar
+                  oportunidades comerciais, com foco em quem procura o que você oferece.
+                </p>
+              </div>
+            </article>
+          </li>
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="secao sobre" aria-labelledby="sobre-titulo">
+      <div class="container sobre__inner">
+
+        <div class="sobre__apresentacao">
+          <header class="secao__cabecalho">
+            <p class="eyebrow">Sobre a Nexora</p>
+            <h2 id="sobre-titulo" class="secao__titulo">
+              Cada página tem um <span class="destaque">trabalho</span> a fazer.
+            </h2>
+            <p class="secao__intro">
+              A Nexora Digital reúne desenvolvimento, design e marketing no mesmo
+              planejamento. O site nasce com um objetivo claro e é pensado, do
+              primeiro rascunho à divulgação, para cumprir esse objetivo.
+            </p>
+          </header>
+
+          <p class="sobre__texto">
+            Trabalhamos em etapas curtas e verificáveis: entender o negócio,
+            planejar a estrutura, construir, testar e só então publicar. Assim,
+            cada decisão pode ser explicada e o cliente acompanha o que está
+            sendo feito.
+          </p>
+        </div>
+
+        <div class="sobre__principios">
+          <p class="eyebrow" id="principios-rotulo">Princípios que orientam cada projeto</p>
+
+          <ul class="principios" aria-labelledby="principios-rotulo">
+            <li class="principio">
+              <span class="principio__marca" aria-hidden="true">01</span>
+              <div>
+                <h3 class="principio__titulo">Clareza</h3>
+                <p class="principio__texto">
+                  Cada página responde a uma pergunta do visitante: texto direto,
+                  hierarquia visível e navegação previsível.
+                </p>
+              </div>
+            </li>
+
+            <li class="principio">
+              <span class="principio__marca" aria-hidden="true">02</span>
+              <div>
+                <h3 class="principio__titulo">Funcionalidade</h3>
+                <p class="principio__texto">
+                  O que está na tela precisa funcionar: menus, formulários e links
+                  testados em computador, tablet e celular.
+                </p>
+              </div>
+            </li>
+
+            <li class="principio">
+              <span class="principio__marca" aria-hidden="true">03</span>
+              <div>
+                <h3 class="principio__titulo">Desempenho</h3>
+                <p class="principio__texto">
+                  Páginas leves, sem bibliotecas desnecessárias, porque site lento
+                  faz o visitante desistir antes de entender a proposta.
+                </p>
+              </div>
+            </li>
+
+            <li class="principio">
+              <span class="principio__marca" aria-hidden="true">04</span>
+              <div>
+                <h3 class="principio__titulo">Objetivo de negócio</h3>
+                <p class="principio__texto">
+                  Antes de desenhar, definimos o que o site precisa gerar:
+                  contatos, pedidos de orçamento ou reconhecimento da marca.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="secao contato" aria-labelledby="contato-titulo">
+      <div class="container contato__inner">
+
+        <div class="contato__apresentacao">
+          <header class="secao__cabecalho">
+            <p class="eyebrow">Contato</p>
+            <h2 id="contato-titulo" class="secao__titulo">Conte o que você precisa.</h2>
+            <p class="secao__intro">
+              Diga o que você quer construir e qual resultado espera. Quanto mais
+              claro o pedido, mais fácil planejar o próximo passo.
+            </p>
+          </header>
+
+          <p class="contato__aviso">
+            <strong>Demonstração:</strong> os campos são validados no seu
+            navegador, mas nenhuma mensagem é enviada ou guardada.
+          </p>
+        </div>
+
+        <!-- novalidate: desliga as bolhas de erro do navegador para usarmos as nossas.
+             O "required" continua nos campos para leitores de tela e como documentação. -->
+        <form class="formulario" id="form-contato" aria-label="Formulário de contato" novalidate>
+
+          <p class="formulario__nota">Todos os campos são obrigatórios.</p>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="nome">Nome</label>
+            <input class="campo__controle" type="text" id="nome" name="nome"
+                   autocomplete="name" maxlength="80" required
+                   aria-describedby="erro-nome">
+            <p class="campo__erro" id="erro-nome"></p>
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="email">E-mail</label>
+            <input class="campo__controle" type="email" id="email" name="email"
+                   autocomplete="email" maxlength="254" required
+                   aria-describedby="erro-email">
+            <p class="campo__erro" id="erro-email"></p>
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="assunto">Assunto</label>
+            <input class="campo__controle" type="text" id="assunto" name="assunto"
+                   autocomplete="off" maxlength="100" required
+                   aria-describedby="erro-assunto">
+            <p class="campo__erro" id="erro-assunto"></p>
+          </div>
+
+          <div class="campo">
+            <label class="campo__rotulo" for="mensagem">Mensagem</label>
+            <textarea class="campo__controle" id="mensagem" name="mensagem"
+                      rows="6" maxlength="1000" required
+                      aria-describedby="erro-mensagem"></textarea>
+            <p class="campo__erro" id="erro-mensagem"></p>
+          </div>
+
+          <button class="botao botao--primario formulario__enviar" type="submit">
+            Enviar mensagem
+          </button>
+
+          <!-- Região de aviso: leitores de tela leem o texto quando ele muda -->
+          <p class="formulario__status" id="status-formulario" role="status"></p>
+
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="site-footer">
+    <div class="container">
+
+      <div class="site-footer__topo">
+
+        <div class="site-footer__marca">
+          <a class="logo" href="#inicio">
+            <span class="logo__texto">Nexora <span class="logo__sufixo">Digital</span></span>
+          </a>
+          <p class="site-footer__frase">
+            Sites claros, interfaces consistentes e marketing com objetivo.
+          </p>
+        </div>
+
+        <nav class="site-footer__nav" aria-label="Rodapé">
+          <ul class="site-footer__lista">
+            <li><a class="site-footer__link" href="#inicio">Início</a></li>
+            <li><a class="site-footer__link" href="#servicos">Serviços</a></li>
+            <li><a class="site-footer__link" href="#sobre">Sobre</a></li>
+            <li><a class="site-footer__link" href="#contato">Contato</a></li>
+          </ul>
+        </nav>
+
+        <dl class="site-footer__info">
+          <div>
+            <dt>Natureza</dt>
+            <dd>Empresa fictícia, criada para um projeto de portfólio</dd>
+          </div>
+          <div>
+            <dt>Áreas</dt>
+            <dd>Sites, interfaces e marketing digital</dd>
+          </div>
+          <div>
+            <dt>Contato</dt>
+            <dd>Pelo formulário desta página</dd>
+          </div>
+        </dl>
+
+      </div>
+
+      <p class="site-footer__copy">
+        &copy; <span id="ano-atual">2026</span> Nexora Digital. Projeto fictício,
+        sem fins comerciais.
+      </p>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,949 @@
+/* =========================================================
+   Nexora Digital | style.css
+   Etapa 6: versão revisada (hover só com mouse, quebra de
+   linha dos títulos e proteção contra rolagem horizontal)
+   Abordagem mobile-first: o CSS comum é escrito para celular
+   e as telas maiores são tratadas em @media (min-width: ...).
+   ========================================================= */
+
+/* ---------- 1. Variáveis (cores, espaços, medidas) ---------- */
+:root {
+  color-scheme: dark;
+
+  --cor-fundo: #0e0f12;
+  --cor-superficie: #17191e;
+  --cor-borda: #2a2d34;
+  --cor-texto: #f2f0ea;
+  --cor-texto-suave: #a9acb4;
+  --cor-destaque: #d7ff4f;
+  --cor-apoio: #ff8a5c; /* segunda cor, usada só em detalhes dos cards */
+  --cor-erro: #ff7a7a;
+  --cor-sobre-destaque: #0e0f12; /* texto sobre fundo de destaque */
+
+  /* Cores da seção clara (Sobre) */
+  --cor-papel: #f2f0ea;
+  --cor-tinta: #0e0f12;
+  --cor-tinta-suave: #4a4d55;
+  --cor-borda-papel: #cfcbc0;
+
+  --fonte-base: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+
+  --espaco-1: 0.5rem;
+  --espaco-2: 1rem;
+  --espaco-3: 1.5rem;
+  --espaco-4: 2rem;
+  --espaco-5: 3rem;
+
+  --largura-maxima: 75rem;
+  --altura-header: 4.5rem;
+  --transicao: 0.2s ease;
+}
+
+/* ---------- 2. Reset básico ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte-base);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  overflow-wrap: break-word; /* palavra muito longa quebra em vez de estourar a tela */
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- 3. Comportamento global ---------- */
+
+/* Rolagem suave, só para quem não pediu menos movimento */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Reserva o espaço do cabeçalho fixo em qualquer rolagem até uma âncora */
+html {
+  scroll-padding-top: var(--altura-header);
+}
+
+/* Foco visível para quem navega pelo teclado */
+:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 3px;
+}
+
+/* Quem pediu menos movimento no sistema fica sem transições */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- 4. Utilitários e componentes reutilizáveis ---------- */
+.container {
+  width: 100%;
+  max-width: var(--largura-maxima);
+  margin-inline: auto;
+  padding-inline: var(--espaco-3);
+}
+
+/* Link "pular para o conteúdo": escondido até receber foco pelo Tab */
+.skip-link {
+  position: absolute;
+  top: -4rem;
+  left: var(--espaco-2);
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 700;
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+}
+
+.skip-link:focus {
+  top: var(--espaco-2);
+}
+
+.skip-link:focus-visible {
+  outline-color: var(--cor-texto);
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem; /* 44px: tamanho confortável para toque */
+  padding: 0.75rem 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--transicao), border-color var(--transicao),
+    color var(--transicao), transform var(--transicao);
+}
+
+.botao:active {
+  transform: translateY(1px);
+}
+
+.botao--primario {
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+}
+
+.botao--secundario {
+  background: transparent;
+  border-color: var(--cor-texto);
+  color: var(--cor-texto);
+}
+
+/* Hover só em aparelhos com mouse: no toque, o hover "gruda" depois do clique */
+@media (hover: hover) {
+  .botao--primario:hover {
+    background: var(--cor-texto);
+  }
+
+  .botao--secundario:hover {
+    border-color: var(--cor-destaque);
+    color: var(--cor-destaque);
+  }
+}
+
+/* Rótulo pequeno acima dos títulos */
+.eyebrow {
+  margin: 0 0 var(--espaco-3);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor-texto-suave);
+}
+
+/* Palavra em destaque dentro de um título */
+.destaque {
+  color: var(--cor-destaque);
+}
+
+/* ---------- 5. Cabeçalho e navegação (celular) ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--altura-header);
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Logotipo tipográfico */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.logo::before {
+  content: "";
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--cor-destaque);
+}
+
+.logo__sufixo {
+  font-weight: 300;
+  color: var(--cor-texto-suave);
+}
+
+/* Botão do menu (só aparece no celular e no tablet) */
+.menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transicao);
+}
+
+@media (hover: hover) {
+  .menu-toggle:hover {
+    color: var(--cor-destaque);
+  }
+}
+
+/* Ícone de hambúrguer desenhado só com CSS: uma barra + duas pseudo-barras */
+.menu-toggle__icone {
+  position: relative;
+  width: 1.5rem;
+  height: 2px;
+  background: currentColor;
+  transition: background-color var(--transicao);
+}
+
+.menu-toggle__icone::before,
+.menu-toggle__icone::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transition: transform var(--transicao);
+}
+
+.menu-toggle__icone::before {
+  top: -7px;
+}
+
+.menu-toggle__icone::after {
+  top: 7px;
+}
+
+/* Menu aberto: o hambúrguer vira um X */
+.menu-toggle[aria-expanded="true"] .menu-toggle__icone {
+  background: transparent;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__icone::before {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__icone::after {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Painel do menu: escondido por padrão, aparece com a classe --aberto */
+.site-nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: calc(100vh - var(--altura-header));
+  max-height: calc(100dvh - var(--altura-header));
+  overflow-y: auto;
+  padding: var(--espaco-3);
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.site-nav--aberto {
+  display: block;
+}
+
+.site-nav__lista {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-nav__link {
+  display: block;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: color var(--transicao);
+}
+
+@media (hover: hover) {
+  .site-nav__link:hover {
+    color: var(--cor-destaque);
+  }
+}
+
+.site-nav__cta {
+  width: 100%;
+  margin-top: var(--espaco-3);
+}
+
+/* ---------- 6. Cabeçalho e navegação (tablet grande e desktop) ---------- */
+@media (min-width: 56em) {
+  .menu-toggle {
+    display: none;
+  }
+
+  /* O menu deixa de ser um painel e vira uma linha dentro do cabeçalho */
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-4);
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    background: none;
+    border-bottom: 0;
+  }
+
+  .site-nav__lista {
+    flex-direction: row;
+    gap: var(--espaco-4);
+  }
+
+  .site-nav__link {
+    padding: 0.5rem 0;
+    border-bottom: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4em;
+    transition: text-decoration-color var(--transicao);
+  }
+
+  .site-nav__link:hover,
+  .site-nav__link:focus-visible {
+    color: var(--cor-texto);
+    text-decoration-color: var(--cor-destaque);
+  }
+
+  .site-nav__cta {
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+/* ---------- 7. Estrutura comum das seções ---------- */
+.secao {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.secao__cabecalho {
+  max-width: 42rem;
+  margin-bottom: var(--espaco-5);
+}
+
+.secao__titulo {
+  margin: 0 0 var(--espaco-2);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance; /* distribui melhor as palavras entre as linhas */
+}
+
+.secao__intro {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- 8. Hero ---------- */
+.hero {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.hero__inner {
+  display: grid;
+  gap: var(--espaco-5);
+  align-items: center;
+}
+
+.hero__titulo {
+  margin: 0 0 var(--espaco-3);
+  font-size: clamp(2.5rem, 7vw, 4.75rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.hero__texto {
+  max-width: 36rem;
+  margin: 0 0 var(--espaco-4);
+  font-size: clamp(1.0625rem, 1.2vw + 0.9rem, 1.375rem);
+  color: var(--cor-texto-suave);
+}
+
+.hero__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+
+/* No celular os botões ocupam a linha toda; em telas maiores, o tamanho do texto */
+.hero__acoes .botao {
+  flex: 1 1 auto;
+}
+
+/* Composição geométrica em SVG: cada classe pinta uma forma */
+.hero__arte {
+  width: min(100%, 18rem);
+  height: auto;
+}
+
+.forma-destaque {
+  fill: var(--cor-destaque);
+}
+
+.forma-claro {
+  fill: var(--cor-texto);
+}
+
+.forma-superficie {
+  fill: var(--cor-superficie);
+  stroke: var(--cor-borda);
+  stroke-width: 2;
+}
+
+.forma-linha {
+  fill: none;
+  stroke: var(--cor-texto);
+  stroke-width: 2;
+}
+
+/* Entrada suave do hero (só para quem não pediu menos movimento) */
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__conteudo,
+  .hero__arte {
+    animation: entrada 0.7s ease both;
+  }
+
+  .hero__arte {
+    animation-delay: 0.15s;
+  }
+}
+
+@media (min-width: 40em) {
+  .hero__acoes .botao {
+    flex: 0 0 auto;
+  }
+
+  .hero__arte {
+    width: min(100%, 24rem);
+    justify-self: end;
+  }
+}
+
+@media (min-width: 56em) {
+  /* Texto à esquerda, composição à direita */
+  .hero__inner {
+    grid-template-columns: 1.4fr 1fr;
+  }
+
+  .hero__arte {
+    width: 100%;
+    max-width: 28rem;
+  }
+}
+
+/* ---------- 9. Serviços ---------- */
+.servicos {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.servicos__lista {
+  display: grid;
+  gap: var(--espaco-3);
+}
+
+/* O <li> estica o card para todos os cards terem a mesma altura */
+.servicos__lista > li {
+  display: flex;
+}
+
+.card-servico {
+  /* Cada card sobrescreve --cor-card; o resto do CSS só usa essa variável */
+  --cor-card: var(--cor-destaque);
+
+  flex: 1;
+  display: grid;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4) var(--espaco-3);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 1rem;
+  transition: border-color var(--transicao), transform var(--transicao);
+}
+
+/* Hover só com mouse; o movimento ainda respeita "reduzir movimento" */
+@media (hover: hover) {
+  .card-servico:hover {
+    border-color: var(--cor-card);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card-servico:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.card-servico--sites {
+  --cor-card: var(--cor-destaque);
+}
+
+.card-servico--interfaces {
+  --cor-card: var(--cor-apoio);
+}
+
+.card-servico--marketing {
+  --cor-card: var(--cor-texto);
+}
+
+.card-servico__icone {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 2px solid var(--cor-card);
+  color: var(--cor-card);
+}
+
+/* Formato do ícone muda por serviço, ecoando as formas do hero */
+.card-servico--sites .card-servico__icone {
+  border-radius: 50%;
+}
+
+.card-servico--interfaces .card-servico__icone {
+  border-radius: 0;
+}
+
+.card-servico--marketing .card-servico__icone {
+  border-radius: 1.75rem 0 0 0;
+}
+
+.card-servico__icone svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card-servico__numero {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--cor-card);
+}
+
+.card-servico__titulo {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.card-servico__texto {
+  margin: 0;
+  color: var(--cor-texto-suave);
+}
+
+/* Tablet: ícone ao lado do texto */
+@media (min-width: 40em) {
+  .card-servico {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--espaco-4);
+  }
+}
+
+/* Desktop: três cards lado a lado, ícone em cima do texto */
+@media (min-width: 56em) {
+  .servicos__lista {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card-servico {
+    grid-template-columns: 1fr;
+    align-content: start;
+  }
+}
+
+/* ---------- 10. Sobre (seção clara) ---------- */
+.sobre {
+  /* Dentro desta seção, as variáveis de cor trocam de valor:
+     todo o texto e as bordas que usam var(--cor-texto) etc. se adaptam sozinhos. */
+  --cor-texto: var(--cor-tinta);
+  --cor-texto-suave: var(--cor-tinta-suave);
+  --cor-borda: var(--cor-borda-papel);
+
+  position: relative;
+  background: var(--cor-papel);
+  color: var(--cor-texto);
+}
+
+/* Quarto de círculo decorativo no canto, com o mesmo tamanho do respiro da seção
+   (assim ele nunca encosta no conteúdo) */
+.sobre::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: clamp(4rem, 10vw, 8rem);
+  aspect-ratio: 1;
+  border-bottom-left-radius: 100%;
+  background: var(--cor-tinta);
+}
+
+/* Destaque no título: marca-texto em vez de texto colorido (verde sobre claro não lê bem) */
+.sobre .destaque {
+  padding-inline: 0.15em;
+  background: var(--cor-destaque);
+  color: inherit;
+}
+
+.sobre .secao__cabecalho {
+  margin-bottom: var(--espaco-3);
+}
+
+.sobre__inner {
+  display: grid;
+  gap: var(--espaco-5);
+}
+
+.sobre__texto {
+  max-width: 42rem;
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--cor-texto-suave);
+}
+
+.principios {
+  margin: 0;
+}
+
+.principio {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--espaco-3);
+  padding-block: var(--espaco-3);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.principio:last-child {
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.principio__marca {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--cor-destaque);
+  color: var(--cor-sobre-destaque);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.principio__titulo {
+  margin: 0 0 0.25rem;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.principio__texto {
+  margin: 0;
+  color: var(--cor-texto-suave);
+}
+
+@media (min-width: 56em) {
+  /* Apresentação à esquerda, princípios à direita */
+  .sobre__inner {
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+}
+
+/* ---------- 11. Contato e formulário ---------- */
+.contato__inner {
+  display: grid;
+  gap: var(--espaco-5);
+}
+
+.contato .secao__cabecalho {
+  margin-bottom: 0;
+}
+
+.contato__aviso {
+  max-width: 28rem;
+  margin: var(--espaco-4) 0 0;
+  padding-left: var(--espaco-2);
+  border-left: 3px solid var(--cor-destaque);
+  font-size: 0.9375rem;
+  color: var(--cor-texto-suave);
+}
+
+.contato__aviso strong {
+  color: var(--cor-texto);
+}
+
+.formulario {
+  display: grid;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4) var(--espaco-3);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 1rem;
+}
+
+.formulario__nota {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--cor-texto-suave);
+}
+
+.campo {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.campo__rotulo {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.campo__controle {
+  width: 100%;
+  min-height: 3rem; /* altura confortável para toque */
+  padding: 0.75rem 1rem;
+  font: inherit;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  border: 2px solid var(--cor-borda);
+  border-radius: 0.5rem;
+  transition: border-color var(--transicao);
+}
+
+textarea.campo__controle {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.campo__controle:hover {
+  border-color: var(--cor-texto-suave);
+}
+
+.campo__controle:focus {
+  border-color: var(--cor-destaque);
+}
+
+/* Estado de erro: o JavaScript liga aria-invalid="true" no campo */
+.campo__controle[aria-invalid="true"] {
+  border-color: var(--cor-erro);
+}
+
+.campo__erro {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--cor-erro);
+}
+
+/* Sem mensagem, o parágrafo não ocupa espaço */
+.campo__erro:empty {
+  display: none;
+}
+
+.formulario__status {
+  margin: 0;
+  padding: var(--espaco-2);
+  border-left: 4px solid var(--cor-borda);
+  background: var(--cor-fundo);
+  font-size: 0.9375rem;
+}
+
+.formulario__status:empty {
+  display: none;
+}
+
+.formulario__status--erro {
+  border-left-color: var(--cor-erro);
+}
+
+.formulario__status--sucesso {
+  border-left-color: var(--cor-destaque);
+}
+
+@media (min-width: 40em) {
+  .formulario {
+    padding: var(--espaco-5) var(--espaco-4);
+  }
+
+  /* Botão com o tamanho do texto, alinhado à esquerda */
+  .formulario__enviar {
+    justify-self: start;
+  }
+}
+
+@media (min-width: 56em) {
+  /* Apresentação à esquerda, formulário à direita */
+  .contato__inner {
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+}
+
+/* ---------- 12. Rodapé ---------- */
+.site-footer {
+  padding-block: var(--espaco-5) var(--espaco-4);
+  background: var(--cor-superficie);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.site-footer__topo {
+  display: grid;
+  gap: var(--espaco-4);
+  padding-bottom: var(--espaco-4);
+}
+
+.site-footer__frase {
+  max-width: 22rem;
+  margin: var(--espaco-2) 0 0;
+  color: var(--cor-texto-suave);
+}
+
+.site-footer__link {
+  display: inline-block;
+  padding-block: 0.5rem; /* aumenta a área de toque */
+  color: var(--cor-texto-suave);
+  transition: color var(--transicao);
+}
+
+.site-footer__link:hover {
+  color: var(--cor-texto);
+  text-decoration: underline;
+  text-decoration-color: var(--cor-destaque);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+.site-footer__info {
+  margin: 0;
+}
+
+.site-footer__info dt {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor-texto-suave);
+}
+
+.site-footer__info dd {
+  margin: 0 0 var(--espaco-2);
+}
+
+.site-footer__copy {
+  margin: 0;
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--cor-borda);
+  font-size: 0.875rem;
+  color: var(--cor-texto-suave);
+}
+
+@media (min-width: 56em) {
+  .site-footer__topo {
+    grid-template-columns: 1.2fr 0.6fr 1fr;
+    gap: var(--espaco-5);
+  }
+}
