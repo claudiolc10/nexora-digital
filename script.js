@@ -1,6 +1,7 @@
 // =========================================================
 // Nexora Digital | script.js
-// Etapa 5: menu mobile + ano do rodapé + formulário de contato
+// Menu mobile + ano do rodapé + formulário + animação ao rolar
+// + vídeo de fundo do hero
 // =========================================================
 
 // ---------------------------------------------------------
@@ -221,3 +222,121 @@ formulario.addEventListener("input", function (evento) {
     validarCampo(campo);
   }
 });
+
+// ---------------------------------------------------------
+// 4. ANIMAÇÃO DE ENTRADA AO ROLAR A PÁGINA
+// Os elementos listados aparecem (com transição do CSS) quando
+// entram na tela pela primeira vez.
+// ---------------------------------------------------------
+
+// Pergunta ao sistema se a pessoa pediu menos movimento.
+const prefereMenosMovimento = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+// Só ativa se o navegador tem IntersectionObserver e a pessoa não pediu menos movimento.
+// Caso contrário, nada é escondido e o conteúdo aparece normalmente.
+if ("IntersectionObserver" in window && !prefereMenosMovimento) {
+  const elementosParaRevelar = document.querySelectorAll(
+    ".secao__cabecalho, .servicos__lista > li, .sobre__texto, .principio, .contato__aviso, .formulario"
+  );
+
+  // O observador é avisado sempre que um elemento entra ou sai da tela.
+  const observador = new IntersectionObserver(
+    function (entradas) {
+      entradas.forEach(function (entrada) {
+        if (entrada.isIntersecting) {
+          entrada.target.classList.add("revelado"); // o CSS faz a transição
+          observador.unobserve(entrada.target); // anima só uma vez
+        }
+      });
+    },
+    { threshold: 0.15 } // basta 15% do elemento aparecer
+  );
+
+  elementosParaRevelar.forEach(function (elemento) {
+    elemento.classList.add("revelar");
+    observador.observe(elemento);
+  });
+
+  // Por último, liga a chave geral: a partir daqui o CSS esconde os ".revelar".
+  document.documentElement.classList.add("reveal-ativo");
+}
+
+// ---------------------------------------------------------
+// 5. VÍDEO DE FUNDO DO HERO
+// O vídeo é só decoração: se der qualquer problema, o hero continua igual.
+// ---------------------------------------------------------
+const videoHero = document.querySelector(".hero__video");
+const botaoPausa = document.querySelector(".hero__pausa");
+const secaoHero = document.querySelector("#inicio");
+
+// Alguns navegadores informam se a pessoa ativou a economia de dados.
+const economiaDeDados =
+  navigator.connection && navigator.connection.saveData;
+
+// Pede ao navegador para tocar; se ele bloquear o autoplay, segue sem vídeo.
+function tocarVideo() {
+  const promessa = videoHero.play();
+
+  if (promessa !== undefined) {
+    promessa.catch(function () {
+      // Autoplay bloqueado: não faz nada, o site continua normal.
+    });
+  }
+}
+
+// Só carrega o vídeo se a pessoa não pediu menos movimento nem economia de dados.
+// (prefereMenosMovimento foi definida na seção 4.)
+if (videoHero && botaoPausa && !prefereMenosMovimento && !economiaDeDados) {
+  let pausadoPelaPessoa = false;
+
+  // Se o arquivo não existir ou falhar: remove o vídeo e o botão.
+  videoHero.addEventListener("error", function () {
+    videoHero.parentElement.remove();
+    botaoPausa.remove();
+  });
+
+  // Quando o vídeo começa a tocar: aparece com fade e o botão é liberado.
+  // { once: true } faz este aviso valer só na primeira vez.
+  videoHero.addEventListener(
+    "playing",
+    function () {
+      videoHero.classList.add("hero__video--pronto");
+      botaoPausa.hidden = false;
+    },
+    { once: true }
+  );
+
+  // Botão de pausa: quem quiser pode parar o movimento.
+  botaoPausa.addEventListener("click", function () {
+    if (videoHero.paused) {
+      pausadoPelaPessoa = false;
+      tocarVideo();
+      botaoPausa.textContent = "Pausar vídeo";
+    } else {
+      pausadoPelaPessoa = true;
+      videoHero.pause();
+      botaoPausa.textContent = "Reproduzir vídeo";
+    }
+  });
+
+  // Economiza bateria: pausa quando o hero sai da tela e retoma quando volta
+  // (a menos que a pessoa tenha pausado de propósito).
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entradas) {
+      if (entradas[0].isIntersecting) {
+        if (!pausadoPelaPessoa) {
+          tocarVideo();
+        }
+      } else {
+        videoHero.pause();
+      }
+    }).observe(secaoHero);
+  }
+
+  // Por último: define o arquivo (isso começa o download) e toca.
+  videoHero.muted = true; // vídeo sem som é o que o navegador deixa tocar sozinho
+  videoHero.src = videoHero.dataset.src;
+  tocarVideo();
+}

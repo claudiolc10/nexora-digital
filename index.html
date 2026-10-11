@@ -43,6 +43,12 @@
 
     <!-- HERO -->
     <section id="inicio" class="hero" aria-labelledby="hero-titulo">
+
+      <!-- Vídeo decorativo de fundo: o script.js carrega o arquivo (data-src) só se fizer sentido -->
+      <div class="hero__fundo" aria-hidden="true">
+        <video class="hero__video" data-src="hero.mp4" muted loop playsinline preload="none"></video>
+      </div>
+
       <div class="container hero__inner">
 
         <div class="hero__conteudo">
@@ -74,6 +80,10 @@
           <path class="forma-claro" d="M200 200H400A200 200 0 0 1 200 400Z" />
         </svg>
 
+      </div>
+
+      <div class="container hero__controles">
+        <button class="hero__pausa" type="button" hidden>Pausar vídeo</button>
       </div>
     </section>
 

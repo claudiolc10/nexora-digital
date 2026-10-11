@@ -1,7 +1,6 @@
 /* =========================================================
    Nexora Digital | style.css
-   Etapa 6: versão revisada (hover só com mouse, quebra de
-   linha dos títulos e proteção contra rolagem horizontal)
+   Versão com animações leves e vídeo de fundo no hero
    Abordagem mobile-first: o CSS comum é escrito para celular
    e as telas maiores são tratadas em @media (min-width: ...).
    ========================================================= */
@@ -165,6 +164,16 @@ html {
   color: var(--cor-sobre-destaque);
 }
 
+/* Seta decorativa nos botões principais.
+   A segunda linha ("/ ''") diz ao leitor de tela para ignorar a seta;
+   navegadores que não entendem essa sintaxe usam a primeira linha. */
+.botao--primario::after {
+  content: "→";
+  content: "→" / "";
+  margin-left: 0.5rem;
+  transition: transform var(--transicao);
+}
+
 .botao--secundario {
   background: transparent;
   border-color: var(--cor-texto);
@@ -175,6 +184,10 @@ html {
 @media (hover: hover) {
   .botao--primario:hover {
     background: var(--cor-texto);
+  }
+
+  .botao--primario:hover::after {
+    transform: translateX(4px);
   }
 
   .botao--secundario:hover {
@@ -420,6 +433,11 @@ html {
 
 /* ---------- 8. Hero ---------- */
 .hero {
+  --opacidade-video: 0.25; /* quanto menor, mais discreto o vídeo */
+
+  position: relative;
+  isolation: isolate; /* mantém o vídeo atrás do texto, mas na frente do fundo da página */
+  overflow: hidden;
   padding-block: clamp(3rem, 8vw, 6rem);
 }
 
@@ -480,29 +498,6 @@ html {
   fill: none;
   stroke: var(--cor-texto);
   stroke-width: 2;
-}
-
-/* Entrada suave do hero (só para quem não pediu menos movimento) */
-@keyframes entrada {
-  from {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .hero__conteudo,
-  .hero__arte {
-    animation: entrada 0.7s ease both;
-  }
-
-  .hero__arte {
-    animation-delay: 0.15s;
-  }
 }
 
 @media (min-width: 40em) {
@@ -945,5 +940,231 @@ textarea.campo__controle {
   .site-footer__topo {
     grid-template-columns: 1.2fr 0.6fr 1fr;
     gap: var(--espaco-5);
+  }
+}
+
+/* =========================================================
+   13. ANIMAÇÕES
+   Regra de ouro: só animamos opacity e transform, que o navegador
+   desenha direto na placa de vídeo, sem recalcular o layout.
+   Tudo fica dentro de prefers-reduced-motion: no-preference.
+   ========================================================= */
+
+/* --- Receitas de movimento (keyframes) --- */
+
+/* Sobe um pouco e aparece */
+@keyframes entrada {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Versão pequena, para mensagens do formulário */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Forma do SVG: cresce a partir do centro */
+@keyframes forma-entra {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Sobe e desce devagar (vai e volta) */
+@keyframes flutuar {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+/* Linha que se desenha da esquerda para a direita */
+@keyframes sublinhar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* --- Hero: texto entra em sequência --- */
+  .hero__conteudo > * {
+    animation: entrada 0.7s ease both;
+  }
+
+  .hero__conteudo > :nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  .hero__conteudo > :nth-child(3) {
+    animation-delay: 0.2s;
+  }
+
+  .hero__conteudo > :nth-child(4) {
+    animation-delay: 0.3s;
+  }
+
+  /* --- Hero: linha desenhada sob a palavra em destaque --- */
+  .hero__titulo .destaque {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero__titulo .destaque::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.02em;
+    height: 0.08em;
+    background: var(--cor-destaque);
+    transform-origin: left;
+    animation: sublinhar 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s both;
+  }
+
+  /* --- Hero: formas do SVG entram uma a uma --- */
+  .hero__arte > * {
+    transform-box: fill-box; /* o centro da transformação é o centro da própria forma */
+    transform-origin: center;
+    animation: forma-entra 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .hero__arte > :nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  /* O ponto verde entra e depois fica flutuando (única animação infinita) */
+  .hero__arte > :nth-child(3) {
+    animation: forma-entra 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both,
+      flutuar 4s ease-in-out 1.2s infinite alternate;
+  }
+
+  .hero__arte > :nth-child(4) {
+    animation-delay: 0.3s;
+  }
+
+  .hero__arte > :nth-child(5) {
+    animation-delay: 0.4s;
+  }
+
+  /* --- Entrada ao rolar a página ---
+     O script.js marca os elementos com .revelar, liga .reveal-ativo no <html>
+     e troca .revelar por .revelado quando o elemento aparece na tela.
+     Sem JavaScript, nada disso se aplica e o conteúdo fica sempre visível. */
+  .reveal-ativo .revelar {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  /* A transição fica só no estado final: o "esconder" é instantâneo
+     e o "aparecer" é suave */
+  .reveal-ativo .revelar.revelado {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* --- Mensagens do formulário aparecem suavemente --- */
+  .campo__erro,
+  .formulario__status {
+    animation: aparecer 0.3s ease both;
+  }
+}
+
+/* Com os cards lado a lado, eles entram em cascata */
+@media (prefers-reduced-motion: no-preference) and (min-width: 56em) {
+  .servicos__lista > li:nth-child(2).revelado {
+    transition-delay: 0.1s;
+  }
+
+  .servicos__lista > li:nth-child(3).revelado {
+    transition-delay: 0.2s;
+  }
+}
+
+/* =========================================================
+   14. VÍDEO DE FUNDO DO HERO
+   ========================================================= */
+.hero__fundo {
+  position: absolute;
+  inset: 0;
+  z-index: -1; /* atrás do texto */
+  pointer-events: none;
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* preenche a área sem deformar */
+  opacity: 0; /* escondido até o vídeo começar a tocar */
+  transition: opacity 1.2s ease;
+}
+
+/* O script.js liga esta classe quando o vídeo começa a tocar */
+.hero__video--pronto {
+  opacity: var(--opacidade-video);
+}
+
+/* Película escura: garante a leitura do texto e esmaece o vídeo
+   para o fundo da página, emendando o hero com a seção seguinte */
+.hero__fundo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgb(14 15 18 / 0.4), var(--cor-fundo));
+}
+
+.hero__controles {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero__pausa {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: var(--espaco-4);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 999px;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-suave);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: color var(--transicao), border-color var(--transicao);
+}
+
+/* Sem isto, o display acima anularia o atributo hidden do HTML */
+.hero__pausa[hidden] {
+  display: none;
+}
+
+@media (hover: hover) {
+  .hero__pausa:hover {
+    color: var(--cor-texto);
+    border-color: var(--cor-texto-suave);
   }
 }
