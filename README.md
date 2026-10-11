@@ -128,7 +128,7 @@ e acesse `http://localhost:8000`.
 
 ## Créditos
 
-- Vídeo do hero: **[NOME DO AUTOR]** via **[Pexels / Pixabay / Coverr]**, licença gratuita.
+- Vídeo do hero: **[olia danilevich]** via **[Pexels]**, licença gratuita.
 
 ## Referência visual
 
