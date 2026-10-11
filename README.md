@@ -12,17 +12,18 @@ Site institucional de uma **empresa fictícia** de desenvolvimento de sites, des
 
 - Cabeçalho fixo com logotipo tipográfico, menu de navegação e botão de chamada para ação.
 - Menu mobile com abertura e fechamento por botão, por clique em um link e pela tecla Esc.
-- Hero com mensagem de valor, dois botões (contato e serviços) e composição geométrica em SVG.
+- Hero com mensagem de valor, dois botões (contato e serviços), composição geométrica em SVG e vídeo decorativo de fundo, discreto e com botão de pausa.
 - Seção de serviços com três cards: desenvolvimento de sites, design de interfaces e marketing digital.
 - Seção sobre a empresa, com proposta de valor e quatro princípios de trabalho.
 - Formulário de contato com validação e mensagens de erro e de sucesso.
 - Rodapé com informações fictícias e ano atualizado por JavaScript.
+- Animações leves: entrada do hero, elementos que aparecem ao rolar a página e detalhes nos botões e no formulário.
 - Layout responsivo para celulares, tablets e desktops.
 
 ## Tecnologias
 
 - **HTML5** semântico
-- **CSS3** (variáveis CSS, Grid, Flexbox, `clamp()`, media queries)
+- **CSS3** (variáveis CSS, Grid, Flexbox, `clamp()`, media queries, animações)
 - **JavaScript** puro (sem frameworks nem bibliotecas)
 
 Não há etapa de build, dependências ou instalação.
@@ -33,11 +34,12 @@ Não há etapa de build, dependências ou instalação.
 nexora-digital/
 ├── index.html   # toda a estrutura e o conteúdo da página
 ├── style.css    # todos os estilos
-├── script.js    # menu mobile, ano do rodapé e validação do formulário
+├── script.js    # menu mobile, ano do rodapé, formulário, animações e vídeo
+├── hero.mp4     # vídeo decorativo de fundo do hero (opcional)
 └── README.md    # este arquivo
 ```
 
-HTML, CSS e JavaScript ficam em arquivos separados, sem CSS inline e sem JavaScript dentro dos atributos HTML.
+HTML, CSS e JavaScript ficam em arquivos separados, sem CSS inline e sem JavaScript dentro dos atributos HTML. O `hero.mp4` é opcional: se o arquivo não existir, o site funciona normalmente, sem o vídeo.
 
 ## Como executar localmente
 
@@ -70,14 +72,20 @@ e acesse `http://localhost:8000`.
 - A seção "Sobre" usa fundo claro redefinindo as variáveis de cor dentro dela, sem repetir regras.
 - Ícones e a composição do hero são SVG inline, sem imagens externas.
 - Efeitos de hover só em aparelhos com mouse (`@media (hover: hover)`).
-- Animações discretas, desligadas para quem prefere menos movimento (`prefers-reduced-motion`).
+- Animações leves, só de `opacity` e `transform`, ativadas apenas para quem não pediu menos movimento (`prefers-reduced-motion`). Sem JavaScript, todo o conteúdo continua visível.
 - Fontes do sistema, para carregar rápido e sem depender de internet.
 
 **JavaScript**
-- Três blocos independentes: menu mobile, ano do rodapé e formulário.
+- Cinco blocos independentes: menu mobile, ano do rodapé, formulário, animação de entrada ao rolar (`IntersectionObserver`) e vídeo de fundo do hero.
 - Funções pequenas e com um único propósito (`obterErro`, `mostrarErro`, `limparErro`, `validarCampo`).
 - Um único ouvinte de evento no formulário atende todos os campos (delegação de eventos).
 - Texto inserido com `textContent`, e não `innerHTML`.
+
+**Vídeo de fundo**
+- É puramente decorativo (`aria-hidden`), sem áudio e com baixa opacidade.
+- O arquivo só é carregado se a pessoa não pediu menos movimento nem economia de dados.
+- Pausa sozinho quando o hero sai da tela, e há um botão para pausar e retomar.
+- Se o arquivo falhar ou o navegador bloquear a reprodução automática, o hero continua normal.
 
 ## Formulário de contato
 
@@ -100,7 +108,8 @@ e acesse `http://localhost:8000`.
 - Cada campo tem `label` associado e erro ligado por `aria-describedby`.
 - Mensagens de status em região `role="status"`.
 - Contraste de cores verificado e botões e campos com área de toque confortável.
-- Respeito à preferência `prefers-reduced-motion`.
+- Respeito à preferência `prefers-reduced-motion`: com "reduzir movimento" ativado no sistema, o vídeo de fundo e as animações ficam desligados, e todo o conteúdo continua visível.
+- Botão para pausar o vídeo de fundo.
 
 ## Testes realizados
 
@@ -108,12 +117,18 @@ e acesse `http://localhost:8000`.
 - Navegação por teclado do início ao fim da página.
 - Validador de HTML do W3C: sem erros nem avisos.
 - Lighthouse (Accessibility, Best Practices e SEO): sem pendências apontadas.
+- Teste no celular, com o site publicado.
 
 ## Limitações conhecidas
 
-- Sem JavaScript, o menu mobile não abre e o formulário não valida (os links de âncora continuam funcionando).
+- Sem JavaScript, o menu mobile não abre, o formulário não valida e o vídeo de fundo não carrega (os links de âncora continuam funcionando).
 - O formulário não envia dados (veja acima).
-- Não há imagens externas: o visual usa só CSS e SVG.
+- Com "reduzir movimento" ou economia de dados ativados, o vídeo de fundo não é carregado.
+- O único arquivo de mídia é o vídeo decorativo do hero. Fora isso, o visual usa só CSS e SVG.
+
+## Créditos
+
+- Vídeo do hero: **[NOME DO AUTOR]** via **[Pexels / Pixabay / Coverr]**, licença gratuita.
 
 ## Referência visual
 
@@ -123,7 +138,7 @@ O site [basicagency.com](https://www.basicagency.com/) foi usado apenas como ins
 
 O projeto pode ser publicado em qualquer hospedagem estática. No **GitHub Pages**:
 
-1. Envie os quatro arquivos para a **raiz** de um repositório público.
+1. Envie os arquivos para a **raiz** de um repositório público.
 2. Em **Settings > Pages**, escolha *Deploy from a branch*, branch `main` e pasta `/ (root)`.
 3. Aguarde um ou dois minutos e acesse o endereço mostrado na página.
 
