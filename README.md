@@ -6,7 +6,7 @@ Site institucional de uma **empresa fictícia** de desenvolvimento de sites, des
 
 ## Demonstração
 
-**Site publicado:** COLE-AQUI-O-LINK
+**Site publicado:** https://claudiolc10.github.io/nexora-digital/
 
 ## Funcionalidades
 
